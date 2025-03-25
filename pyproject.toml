@@ -1,0 +1,12 @@
+[project]
+name = "sdcomms"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipython>=9.0.2",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.1",
+    "schemdraw>=0.20",
+]
