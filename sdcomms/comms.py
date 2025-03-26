@@ -349,15 +349,14 @@ class CouplerCirc(Element):
         x = [(w / 2) * math.cos(t0) + w / 2 for t0 in t]
         x[-1] = x[0]
         y[-1] = y[0]  # Ensure the path is actually closed
-        self.segments.append(Segment(list(zip(x, y))))
+        self.segments.append(Segment(list(zip(x, y)), fill=OPTfill))
 
-        self.anchors["N0"] = (w / 2, 0)
-        self.anchors["S0"] = (w / 2, 0)
-        self.anchors["E0"] = (w / 2, 0)
-        self.anchors["W0"] = (w / 2, 0)
-        self.elmparams["drop"] = (w / 2, 0)
+        self.anchors["N0"] = (w / 2, h / 2)
+        self.anchors["S0"] = (w / 2, -h / 2)
+        self.anchors["E0"] = (w, 0)
+        self.anchors["W0"] = (0, 0)
+        self.elmparams["drop"] = (w, 0)
         self.color(OPTcol)
-        self.fill(OPTfill)
 
 
 class Fiber(Element):
