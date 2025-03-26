@@ -20,6 +20,12 @@ from .comms import (
     PD,
     LD,
     MUX,
+    OPTcol,
+    OPTfill,
+    RFcol,
+    RFfill,
+    OPTRFcol,
+    OPTRFfill,
 )
 from schemdraw.dsp import (
     Circle,
