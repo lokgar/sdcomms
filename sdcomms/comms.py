@@ -12,11 +12,11 @@ from schemdraw.segments import Segment, SegmentArc, SegmentCircle, SegmentPoly
 from schemdraw.util import linspace
 
 
-OPT = "#154d76"
+OPTcol = "#154d76"
 OPTfill = "white"
-RF = "#8b0000"
+RFcol = "#8b0000"
 RFfill = "white"
-OPTRF = "#663399"
+OPTRFcol = "#663399"
 OPTRFfill = "white"
 
 
@@ -45,7 +45,7 @@ class Bend90(Element):
         self.anchors["out"] = (0, radius)
         self.elmparams["drop"] = (0, radius)
 
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class Bend180(Element):
@@ -74,7 +74,7 @@ class Bend180(Element):
         self.anchors["out"] = (-radius, 0)
         self.elmparams["drop"] = (-radius, 0)
 
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class Rectangle(Element):
@@ -178,6 +178,68 @@ class Rectangle(Element):
         self.elmparams["drop"] = self.anchors[f"E{numE - 1}"]
 
 
+class MUX(Element):
+    """A generic multiplexer element.
+
+    Parameters
+    ----------
+    numE : int, default=1
+        Number of anchor points on the East (right) edge.
+    numW : int, default=1
+        Number of anchor points on the West (left) edge.
+    **kwargs :
+        Other Element keyword arguments.
+
+    Anchors
+    -------
+    E{i} : tuple
+        Points along the right edge, from top to bottom, where i goes from 0 to numE-1.
+        Evenly spaced along the edge.
+    W{i} : tuple
+        Points along the left edge, from top to bottom, where i goes from 0 to numW-1.
+        Evenly spaced along the edge.
+    """
+
+    def __init__(self, numE=1, numW=1, **kwargs):
+        super().__init__(**kwargs)
+
+        height1 = 2.5
+        height2 = 1
+        width = 1
+
+        self.segments.append(
+            SegmentPoly(
+                [
+                    (0, height1 / 2),
+                    (width, height2 / 2),
+                    (width, -height2 / 2),
+                    (0, -height1 / 2),
+                    (0, height1 / 2),
+                ],
+                fill=OPTfill,
+            )
+        )
+
+        for i in range(numE):
+            self.anchors[f"E{i}"] = (
+                width,
+                ((i + 1) * height2 / (numE + 1)) - height2 / 2,
+            )
+
+        for i in range(numW):
+            self.anchors[f"W{i}"] = (
+                0,
+                ((i + 1) * height1 / (numW + 1)) - height1 / 2,
+            )
+
+        self.elmparams["drop"] = self.anchors[f"E{numE - 1}"]
+        self.elmparams["lblloc"] = "center"
+        self.elmparams["lblofst"] = 0
+
+        self.color(OPTcol)
+        self.label("MUX", loc="center")
+
+
 class Circulator(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -189,7 +251,7 @@ class Circulator(Element):
             SegmentArc((0, 0), 0.9 * radius, 0.9 * radius, 30, 200, "cw")
         )
 
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class BS(Rectangle):
@@ -242,7 +304,7 @@ class BS(Rectangle):
         self.segments.append(
             Segment([(0, self.height / 2), (self.width, -self.height / 2)])
         )
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class CouplerDot(Rectangle):
@@ -264,10 +326,10 @@ class CouplerDot(Rectangle):
             numS=1,
             numE=1,
             numW=1,
-            fillcol=OPT,
+            fillcol=OPTcol,
             **kwargs,
         )
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class CouplerCirc(Element):
@@ -294,7 +356,7 @@ class CouplerCirc(Element):
         self.anchors["E0"] = (w / 2, 0)
         self.anchors["W0"] = (w / 2, 0)
         self.elmparams["drop"] = (w / 2, 0)
-        self.color(OPT)
+        self.color(OPTcol)
         self.fill(OPTfill)
 
 
@@ -334,7 +396,7 @@ class Fiber(Element):
         self.elmparams["drop"] = (self.length, 0)
         self.anchors["in"] = (0, 0)
         self.anchors["out"] = (self.length, 0)
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class PolCtrl(Element):
@@ -374,7 +436,7 @@ class PolCtrl(Element):
         self.elmparams["drop"] = (self.length, 0)
         self.anchors["in"] = (0, 0)
         self.anchors["out"] = (self.length, 0)
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class VOA(Element):
@@ -423,7 +485,7 @@ class VOA(Element):
         self.elmparams["drop"] = (self.width, 0)
         self.anchors["W"] = (0, 0)
         self.anchors["E"] = (self.width, 0)
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class PM(Rectangle):
@@ -491,7 +553,7 @@ class PM(Rectangle):
         )
 
         self.label("PM", loc="center", ofst=(0, -0.035))
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class MZM(Rectangle):
@@ -580,7 +642,7 @@ class MZM(Rectangle):
         self.segments.extend(_mzm(0, 0, a, cx, cy, d))
 
         self.label(label, loc="center", ofst=(0, -0.04))
-        self.color(OPTRF)
+        self.color(OPTRFcol)
 
 
 class IQM(Rectangle):
@@ -687,7 +749,7 @@ class IQM(Rectangle):
             schemdraw.SegmentText((self.width / 2, -self.height / 4 - 0.02), "Q")
         )
 
-        self.color(OPTRF)
+        self.color(OPTRFcol)
 
 
 class OSA(Rectangle):
@@ -820,7 +882,7 @@ class OSA(Rectangle):
         ]
         self.segments.append(Segment(path))
 
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class ESA(Rectangle):
@@ -960,7 +1022,7 @@ class ESA(Rectangle):
         ]
         self.segments.append(Segment(path))
 
-        self.color(RF)
+        self.color(RFcol)
 
 
 class AWG(Rectangle):
@@ -1097,7 +1159,7 @@ class AWG(Rectangle):
         ]
         self.segments.append(SegmentPoly(path, fill=True))
 
-        self.color(RF)
+        self.color(RFcol)
 
 
 class Scope(Rectangle):
@@ -1317,7 +1379,7 @@ class OPM(Rectangle):
         #     SegmentCircle((self.width / 2, -self.height / 5), 0.05, fill=True)
         # )
 
-        self.color(OPT)
+        self.color(OPTcol)
 
 
 class PD(Rectangle):
@@ -1519,4 +1581,4 @@ class LD(Rectangle):
             )
         )
 
-        self.color(OPT)
+        self.color(OPTcol)

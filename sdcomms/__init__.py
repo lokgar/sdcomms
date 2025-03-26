@@ -19,6 +19,7 @@ from .comms import (
     OPM,
     PD,
     LD,
+    MUX,
 )
 from schemdraw.dsp import (
     Circle,
@@ -28,7 +29,6 @@ from schemdraw.dsp import (
     Amp,
     Adc,
     Dac,
-    Multiplexer,
 )
 
 from .dsp_wrappers import Filter
@@ -65,7 +65,7 @@ __all__ = [
     "Circulator",
     "Adc",
     "Dac",
-    "Multiplexer",
+    "MUX",
     "Arc2",
     "Arc3",
     "ArcLoop",
