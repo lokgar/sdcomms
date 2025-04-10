@@ -359,7 +359,7 @@ class CouplerCirc(Element):
         self.color(OPTcol)
 
 
-class Fiber(Element):
+class Fiber(Rectangle):
     """A fiber element.
 
     Parameters
@@ -374,28 +374,40 @@ class Fiber(Element):
     """
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.radius = 0.3
-        self.length = 1.5
-        self.segments.append(Segment([(0, 0), (self.length, 0)]))
-        self.segments.append(
-            SegmentCircle(
-                (self.length / 2 - 0.125, self.radius), self.radius, fill=False
-            )
+        super().__init__(
+            width=1.1,
+            height=0.9,
+            fillcol=OPTfill,
+            numE=1,
+            numW=1,
+            numN=1,
+            numS=1,
+            **kwargs,
         )
-        self.segments.append(
-            SegmentCircle((self.length / 2, self.radius), self.radius, fill=False)
-        )
-        self.segments.append(
-            SegmentCircle(
-                (self.length / 2 + 0.125, self.radius), self.radius, fill=False
-            )
-        )
-
-        self.elmparams["drop"] = (self.length, 0)
-        self.anchors["in"] = (0, 0)
-        self.anchors["out"] = (self.length, 0)
         self.color(OPTcol)
+
+        self.radius = 0.3
+        self.length = 1
+        self.segments.append(Segment([(0.1, -0.3), (self.length, -0.3)]))
+        self.segments.append(
+            SegmentCircle(
+                (0.05 + self.length / 2 - 0.125, self.radius - 0.3),
+                self.radius,
+                fill=False,
+            )
+        )
+        self.segments.append(
+            SegmentCircle(
+                (0.05 + self.length / 2, self.radius - 0.3), self.radius, fill=False
+            )
+        )
+        self.segments.append(
+            SegmentCircle(
+                (0.05 + self.length / 2 + 0.125, self.radius - 0.3),
+                self.radius,
+                fill=False,
+            )
+        )
 
 
 class PolCtrl(Element):
