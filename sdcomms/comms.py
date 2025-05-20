@@ -247,26 +247,52 @@ class Circulator(Element):
         radius = 0.5
 
         self.segments.append(SegmentCircle((0, 0), radius, fill=OPTfill))
-        self.segments.append(SegmentArc((0, 0), 1.2 * radius, 1.2 * radius, -90, 200))
-        self.segments.append(
-            SegmentPoly(
-                [
-                    (
-                        0.6 * radius * math.cos(math.radians(-90)) - 0.1,
-                        0.6 * radius * math.sin(math.radians(-90)),
-                    ),
-                    (
-                        0.6 * radius * math.cos(math.radians(-90)) + 0.05,
-                        0.6 * radius * math.sin(math.radians(-90)) + 0.07,
-                    ),
-                    (
-                        0.6 * radius * math.cos(math.radians(-90)) + 0.05,
-                        0.6 * radius * math.sin(math.radians(-90)) - 0.07,
-                    ),
-                ],
-                fill=OPTcol,
+        self.segments.append(SegmentArc((0, 0), 1.2 * radius, 1.2 * radius, -70, 200))
+
+        def _rotate(points, angle_degrees):
+            angle_radians = math.radians(angle_degrees)
+            cos_a = math.cos(angle_radians)
+            sin_a = math.sin(angle_radians)
+
+            rotated_points = []
+            for x, y in points:
+                x_new = x * cos_a - y * sin_a
+                y_new = x * sin_a + y * cos_a
+                rotated_points.append((x_new, y_new))
+
+            return rotated_points
+
+        arrow = [(-0.08, 0), (0.08, 0.06), (0.08, -0.06)]
+        arrow_rotated = _rotate(arrow, 30)
+        # shift to the new origin
+        arrow_rotated = [
+            (
+                x + 0.6 * radius * math.cos(math.radians(-70)),
+                y + 0.6 * radius * math.sin(math.radians(-70)),
             )
-        )
+            for x, y in arrow_rotated
+        ]
+        self.segments.append(SegmentPoly(arrow_rotated, fill=OPTcol))
+
+        # self.segments.append(
+        #     SegmentPoly(
+        #         [
+        #             (
+        #                 0.6 * radius * math.cos(math.radians(-90)) - 0.1,
+        #                 0.6 * radius * math.sin(math.radians(-90)),
+        #             ),
+        #             (
+        #                 0.6 * radius * math.cos(math.radians(-90)) + 0.05,
+        #                 0.6 * radius * math.sin(math.radians(-90)) + 0.07,
+        #             ),
+        #             (
+        #                 0.6 * radius * math.cos(math.radians(-90)) + 0.05,
+        #                 0.6 * radius * math.sin(math.radians(-90)) - 0.07,
+        #             ),
+        #         ],
+        #         fill=OPTcol,
+        #     )
+        # )
 
         self.color(OPTcol)
 
