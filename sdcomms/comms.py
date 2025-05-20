@@ -247,8 +247,25 @@ class Circulator(Element):
         radius = 0.5
 
         self.segments.append(SegmentCircle((0, 0), radius, fill=OPTfill))
+        self.segments.append(SegmentArc((0, 0), 1.2 * radius, 1.2 * radius, -90, 200))
         self.segments.append(
-            SegmentArc((0, 0), 0.9 * radius, 0.9 * radius, 30, 200, "cw")
+            SegmentPoly(
+                [
+                    (
+                        0.6 * radius * math.cos(math.radians(-90)) - 0.1,
+                        0.6 * radius * math.sin(math.radians(-90)),
+                    ),
+                    (
+                        0.6 * radius * math.cos(math.radians(-90)) + 0.05,
+                        0.6 * radius * math.sin(math.radians(-90)) + 0.07,
+                    ),
+                    (
+                        0.6 * radius * math.cos(math.radians(-90)) + 0.05,
+                        0.6 * radius * math.sin(math.radians(-90)) - 0.07,
+                    ),
+                ],
+                fill=OPTcol,
+            )
         )
 
         self.color(OPTcol)
