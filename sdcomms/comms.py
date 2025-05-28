@@ -201,6 +201,69 @@ class Termination(Element):
         self.elmparams["drop"] = (0, 0)
 
 
+class FBG(Element):
+    """A fiber Bragg grating element.
+
+    Parameters
+    ----------
+    **kwargs :
+        Other Element keyword arguments.
+
+    Anchors
+    -------
+    in : The input point of the FBG
+    out : The output point of the FBG
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.segments.append(
+            SegmentPoly(
+                [
+                    (0, -0.5 / 2),
+                    (1, -0.5 / 2),
+                    (1, 0.5 / 2),
+                    (0, 0.5 / 2),
+                    (0, -0.5 / 2),
+                ],
+            )
+        )
+
+        for i in range(4):
+            self.segments.append(
+                SegmentPoly(
+                    [
+                        (0.15 + i * 0.2, 0.5 / 2),
+                        (0.15 + i * 0.2, 0.5 / 2 + 0.1),
+                        (0.25 + i * 0.2, 0.5 / 2 + 0.1),
+                        (0.25 + i * 0.2, 0.5 / 2),
+                        (0.15 + i * 0.2, 0.5 / 2),
+                    ],
+                    fill=OPTcol,
+                )
+            )
+
+            self.segments.append(
+                SegmentPoly(
+                    [
+                        (0.15 + i * 0.2, -0.5 / 2),
+                        (0.15 + i * 0.2, -0.5 / 2 - 0.1),
+                        (0.25 + i * 0.2, -0.5 / 2 - 0.1),
+                        (0.25 + i * 0.2, -0.5 / 2),
+                        (0.15 + i * 0.2, -0.5 / 2),
+                    ],
+                    fill=OPTcol,
+                )
+            )
+
+        self.anchors["in"] = (0, 0)
+        self.anchors["out"] = (1, 0)
+
+        self.elmparams["drop"] = (1, 0)
+        self.label("FBG", loc="center", ofst=(0, -0.03))
+
+
 class MUX(Element):
     """A generic multiplexer element.
 
