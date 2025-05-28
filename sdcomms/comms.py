@@ -178,6 +178,26 @@ class Rectangle(Element):
         self.elmparams["drop"] = self.anchors[f"E{numE - 1}"]
 
 
+class Termination(Element):
+    """A termination element.
+
+    Parameters
+    ----------
+    **kwargs :
+        Other Element keyword arguments.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.segments.append(Segment([(0, 0), (0.1, 0.1)], color=OPTcol))
+        self.segments.append(Segment([(0, 0), (-0.1, -0.1)], color=OPTcol))
+        self.anchors["in"] = (0, 0)
+        self.anchors["out"] = (0, 0)
+
+        self.elmparams["drop"] = (0, 0)
+
+
 class MUX(Element):
     """A generic multiplexer element.
 

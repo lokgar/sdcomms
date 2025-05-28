@@ -1,4 +1,5 @@
 from .comms import (
+    Termination,
     Bend90,
     Bend180,
     Rectangle,
@@ -53,6 +54,7 @@ __all__ = [
     "PolCtrl",
     "VOA",
     "PM",
+    "Termination",
     "MZM",
     "IQM",
     "OSA",
