@@ -274,25 +274,11 @@ class Circulator(Element):
         ]
         self.segments.append(SegmentPoly(arrow_rotated, fill=OPTcol))
 
-        # self.segments.append(
-        #     SegmentPoly(
-        #         [
-        #             (
-        #                 0.6 * radius * math.cos(math.radians(-90)) - 0.1,
-        #                 0.6 * radius * math.sin(math.radians(-90)),
-        #             ),
-        #             (
-        #                 0.6 * radius * math.cos(math.radians(-90)) + 0.05,
-        #                 0.6 * radius * math.sin(math.radians(-90)) + 0.07,
-        #             ),
-        #             (
-        #                 0.6 * radius * math.cos(math.radians(-90)) + 0.05,
-        #                 0.6 * radius * math.sin(math.radians(-90)) - 0.07,
-        #             ),
-        #         ],
-        #         fill=OPTcol,
-        #     )
-        # )
+        self.anchors["1"] = (-radius, 0)
+        self.anchors["2"] = (radius, 0)
+        self.anchors["3"] = (0, -radius)
+
+        self.elmparams["drop"] = (radius, 0)
 
         self.color(OPTcol)
 
