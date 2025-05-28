@@ -227,6 +227,7 @@ class FBG(Element):
                     (0, 0.5 / 2),
                     (0, -0.5 / 2),
                 ],
+                color=OPTcol,
             )
         )
 
@@ -241,6 +242,7 @@ class FBG(Element):
                         (0.15 + i * 0.2, 0.5 / 2),
                     ],
                     fill=OPTcol,
+                    color=OPTcol,
                 )
             )
 
@@ -254,6 +256,7 @@ class FBG(Element):
                         (0.15 + i * 0.2, -0.5 / 2),
                     ],
                     fill=OPTcol,
+                    color=OPTcol,
                 )
             )
 
@@ -261,7 +264,7 @@ class FBG(Element):
         self.anchors["out"] = (1, 0)
 
         self.elmparams["drop"] = (1, 0)
-        self.label("FBG", loc="center", ofst=(0, -0.03))
+        self.label("FBG", loc="center", ofst=(0, -0.03), color=OPTcol)
 
 
 class MUX(Element):
