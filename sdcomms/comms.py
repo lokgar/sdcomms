@@ -656,7 +656,7 @@ class PM(Rectangle):
     def __init__(
         self,
         width=1,
-        height=0.7,
+        height=0.5,
         numN=1,
         numS=1,
         numE=1,
@@ -674,12 +674,12 @@ class PM(Rectangle):
             **kwargs,
         )
 
-        self.segments.append(
-            Segment([(0, self.height / 3.25), (self.width, self.height / 3.25)])
-        )
-        self.segments.append(
-            Segment([(0, -self.height / 3.25), (self.width, -self.height / 3.25)])
-        )
+        # self.segments.append(
+        #     Segment([(0, self.height / 3.25), (self.width, self.height / 3.25)])
+        # )
+        # self.segments.append(
+        #     Segment([(0, -self.height / 3.25), (self.width, -self.height / 3.25)])
+        # )
 
         self.label("PM", loc="center", ofst=(0, -0.035))
         self.color(OPTcol)
@@ -886,10 +886,6 @@ class OSA(Rectangle):
 
     Parameters
     ----------
-    width : float, default=1.85
-        Width of the OSA.
-    height : float, default=1.25
-        Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
     numS : int, default=1
@@ -918,7 +914,7 @@ class OSA(Rectangle):
     """
 
     def __init__(
-        self, width=1.85, height=1.25, numN=1, numS=1, numE=1, numW=1, **kwargs
+        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
     ):
         super().__init__(
             width=width,
@@ -931,7 +927,7 @@ class OSA(Rectangle):
             **kwargs,
         )
 
-        # Disaplay inside the screen
+        # Display inside the screen
         disp_x_offset = 0.2
         disp_y_offset = -0.35
         disp_width = 1.1
@@ -959,7 +955,7 @@ class OSA(Rectangle):
         button_width = 0.1
         button_height = 0.1
         button_x_offset = 1.55
-        button_y_offset = -0.5
+        button_y_offset = -0.4
         button_spacing = 0.1
 
         self.segments.extend(
@@ -991,24 +987,22 @@ class OSA(Rectangle):
             for i in range(3)
         )
 
-        # Spectrum on the screen
-        def _make_spectrum(
-            length: int = 150,
-        ) -> Sequence[Tuple[float, float]]:
-            path = []
-            for x in range(length):
-                if length // 2 - 5 < x < length // 2 + 5:
-                    y = 0.8 * disp_height * (1 - abs(x - length // 2) / 5)
-                else:
-                    y = 0.2 * disp_height * (random.random() - 0.5)
-                path.append((x / length * 0.8 * disp_width, 0.8 * y))
-            return path
+        import numpy as np
 
-        path = _make_spectrum()
-        path = [
-            (x + disp_x_offset + 0.1 * disp_width, y + disp_y_offset + 0.15)
-            for x, y in path
-        ]
+        p = np.load("spectrum.npy")
+        path = []
+        path.extend(
+            (float(p[i, 0] / 600000000) + 0.75, float(p[i, 1] / 90) + 0.72)
+            for i in range(p.shape[0])
+        )
+
+        noisy_path = []
+        for x, y in path:
+            noise_amplitude = 0.1 * disp_height
+            y_noise = noise_amplitude * (random.random() - 0.5)
+            noisy_path.append((x, y + y_noise))
+        path = noisy_path
+
         self.segments.append(Segment(path))
 
         self.color(OPTcol)
@@ -1021,7 +1015,7 @@ class ESA(Rectangle):
     ----------
     width : float, default=1.85
         Width of the OSA.
-    height : float, default=1.25
+    height : float, default=1.1
         Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
@@ -1051,7 +1045,7 @@ class ESA(Rectangle):
     """
 
     def __init__(
-        self, width=1.85, height=1.25, numN=1, numS=1, numE=1, numW=1, **kwargs
+        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
     ):
         super().__init__(
             width=width,
@@ -1064,7 +1058,7 @@ class ESA(Rectangle):
             **kwargs,
         )
 
-        # Disaplay inside the screen
+        # Display inside the screen
         disp_x_offset = 0.2
         disp_y_offset = -0.35
         disp_width = 1.1
@@ -1092,7 +1086,7 @@ class ESA(Rectangle):
         button_width = 0.1
         button_height = 0.1
         button_x_offset = 1.55
-        button_y_offset = -0.5
+        button_y_offset = -0.4
         button_spacing = 0.1
 
         self.segments.extend(
@@ -1124,31 +1118,22 @@ class ESA(Rectangle):
             for i in range(3)
         )
 
-        # Spectrum on the screen
-        def _make_spectrum(
-            length: int = 200,
-        ) -> Sequence[Tuple[float, float]]:
-            path = []
-            peaks = [length // 4, length // 2, 3 * length // 4]
-            amplitudes = [0.5, 0.7, 0.5]
-            for x in range(length):
-                y = 0
-                for peak, amplitude in zip(peaks, amplitudes):
-                    if peak - 5 < x < peak + 5:
-                        y += amplitude * disp_height * (1 - abs(x - peak) / 5)
-                    else:
-                        y += 0.08 * disp_height * (random.random() - 0.5)
-                path.append((x / length * 0.8 * disp_width, 0.9 * y))
-            return path
+        import numpy as np
 
-        path = _make_spectrum()
-        path = [
-            (
-                x + disp_x_offset + 0.1 * disp_width,
-                y + disp_y_offset + 0.15,
-            )
-            for x, y in path
-        ]
+        p = np.load("spectrum.npy")
+        path = []
+        path.extend(
+            (float(p[i, 0] / 600000000) + 0.75, float(p[i, 1] / 90) + 0.72)
+            for i in range(p.shape[0])
+        )
+
+        noisy_path = []
+        for x, y in path:
+            noise_amplitude = 0.1 * disp_height
+            y_noise = noise_amplitude * (random.random() - 0.5)
+            noisy_path.append((x, y + y_noise))
+        path = noisy_path
+
         self.segments.append(Segment(path))
 
         self.color(RFcol)
@@ -1161,7 +1146,7 @@ class AWG(Rectangle):
     ----------
     width : float, default=1.85
         Width of the OSA.
-    height : float, default=1.25
+    height : float, default=1.1
         Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
@@ -1191,7 +1176,7 @@ class AWG(Rectangle):
     """
 
     def __init__(
-        self, width=1.85, height=1.25, numN=1, numS=1, numE=1, numW=1, **kwargs
+        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
     ):
         super().__init__(
             width=width,
@@ -1232,7 +1217,7 @@ class AWG(Rectangle):
         button_width = 0.1
         button_height = 0.1
         button_x_offset = 1.55
-        button_y_offset = -0.5
+        button_y_offset = -0.4
         button_spacing = 0.1
 
         self.segments.extend(
@@ -1299,7 +1284,7 @@ class Scope(Rectangle):
     ----------
     width : float, default=1.85
         Width of the OSA.
-    height : float, default=1.25
+    height : float, default=1.1
         Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
@@ -1329,7 +1314,7 @@ class Scope(Rectangle):
     """
 
     def __init__(
-        self, width=1.85, height=1.25, numN=1, numS=1, numE=1, numW=1, **kwargs
+        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
     ):
         super().__init__(
             width=width,
@@ -1369,7 +1354,7 @@ class Scope(Rectangle):
         button_width = 0.1
         button_height = 0.1
         button_x_offset = 1.55
-        button_y_offset = -0.5
+        button_y_offset = -0.4
         button_spacing = 0.1
 
         self.segments.extend(
