@@ -3,6 +3,19 @@ from .comms import OPTcol, OPTfill
 
 
 class Filter(DSPFilter):
+    """Filter
+
+    Args:
+        response: Filter response ('lp', 'bp', 'hp', or 'notch') for
+            low-pass, band-pass, high-pass, and notch/band-stop filters
+
+    Anchors:
+        * N
+        * S
+        * E
+        * W
+    """
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("fill", OPTfill)
         kwargs.setdefault("color", OPTcol)

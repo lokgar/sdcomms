@@ -1,3 +1,4 @@
+import os
 import math
 import random
 from typing import Sequence, Tuple
@@ -913,9 +914,7 @@ class OSA(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(
-        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
-    ):
+    def __init__(self, width=2.6, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -928,10 +927,10 @@ class OSA(Rectangle):
         )
 
         # Display inside the screen
-        disp_x_offset = 0.2
-        disp_y_offset = -0.35
-        disp_width = 1.1
-        disp_height = 0.7
+        disp_x_offset = 0.1
+        disp_y_offset = -0.45
+        disp_width = 1.2
+        disp_height = 0.9
 
         self.segments.append(
             SegmentPoly(
@@ -948,51 +947,12 @@ class OSA(Rectangle):
             )
         )
 
-        # Large knob on the right
-        self.segments.append(SegmentCircle((1.6, 0.35), 0.1, fill=False))
-
-        # Rectangular buttons
-        button_width = 0.1
-        button_height = 0.1
-        button_x_offset = 1.55
-        button_y_offset = -0.4
-        button_spacing = 0.1
-
-        self.segments.extend(
-            SegmentPoly(
-                [
-                    (
-                        button_x_offset,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                    (
-                        button_x_offset,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                ],
-                fill=False,
-            )
-            for i in range(3)
-        )
-
         import numpy as np
 
-        p = np.load("spectrum.npy")
+        p = np.load(os.path.join(os.path.dirname(__file__), "spectrum.npy"))
         path = []
         path.extend(
-            (float(p[i, 0] / 600000000) + 0.75, float(p[i, 1] / 90) + 0.72)
+            (float(p[i, 0] / 500000000) + 0.7, float(p[i, 1] / 80) + 0.8)
             for i in range(p.shape[0])
         )
 
@@ -1005,6 +965,7 @@ class OSA(Rectangle):
 
         self.segments.append(Segment(path))
 
+        self.label("OSA", loc="center", ofst=(0.65, -0.04))
         self.color(OPTcol)
 
 
@@ -1013,10 +974,6 @@ class ESA(Rectangle):
 
     Parameters
     ----------
-    width : float, default=1.85
-        Width of the OSA.
-    height : float, default=1.1
-        Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
     numS : int, default=1
@@ -1044,9 +1001,7 @@ class ESA(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(
-        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
-    ):
+    def __init__(self, width=2.6, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -1059,10 +1014,10 @@ class ESA(Rectangle):
         )
 
         # Display inside the screen
-        disp_x_offset = 0.2
-        disp_y_offset = -0.35
-        disp_width = 1.1
-        disp_height = 0.7
+        disp_x_offset = 0.1
+        disp_y_offset = -0.45
+        disp_width = 1.2
+        disp_height = 0.9
 
         self.segments.append(
             SegmentPoly(
@@ -1079,51 +1034,12 @@ class ESA(Rectangle):
             )
         )
 
-        # Large knob on the right
-        self.segments.append(SegmentCircle((1.6, 0.35), 0.1, fill=False))
-
-        # Rectangular buttons
-        button_width = 0.1
-        button_height = 0.1
-        button_x_offset = 1.55
-        button_y_offset = -0.4
-        button_spacing = 0.1
-
-        self.segments.extend(
-            SegmentPoly(
-                [
-                    (
-                        button_x_offset,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                    (
-                        button_x_offset,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                ],
-                fill=False,
-            )
-            for i in range(3)
-        )
-
         import numpy as np
 
-        p = np.load("spectrum.npy")
+        p = np.load(os.path.join(os.path.dirname(__file__), "spectrum.npy"))
         path = []
         path.extend(
-            (float(p[i, 0] / 600000000) + 0.75, float(p[i, 1] / 90) + 0.72)
+            (float(p[i, 0] / 500000000) + 0.7, float(p[i, 1] / 80) + 0.8)
             for i in range(p.shape[0])
         )
 
@@ -1136,6 +1052,7 @@ class ESA(Rectangle):
 
         self.segments.append(Segment(path))
 
+        self.label("ESA", loc="center", ofst=(0.65, -0.04))
         self.color(RFcol)
 
 
@@ -1144,10 +1061,6 @@ class AWG(Rectangle):
 
     Parameters
     ----------
-    width : float, default=1.85
-        Width of the OSA.
-    height : float, default=1.1
-        Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
     numS : int, default=1
@@ -1175,9 +1088,7 @@ class AWG(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(
-        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
-    ):
+    def __init__(self, width=2.6, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -1190,10 +1101,10 @@ class AWG(Rectangle):
         )
 
         # Disaplay inside the screen
-        disp_x_offset = 0.2
-        disp_y_offset = -0.35
-        disp_width = 1.1
-        disp_height = 0.7
+        disp_x_offset = 0.1
+        disp_y_offset = -0.45
+        disp_width = 1.2
+        disp_height = 0.9
 
         self.segments.append(
             SegmentPoly(
@@ -1208,45 +1119,6 @@ class AWG(Rectangle):
                 ],
                 cornerradius=0.25,
             )
-        )
-
-        # Large knob on the right
-        self.segments.append(SegmentCircle((1.6, 0.35), 0.1, fill=False))
-
-        # Rectangular buttons
-        button_width = 0.1
-        button_height = 0.1
-        button_x_offset = 1.55
-        button_y_offset = -0.4
-        button_spacing = 0.1
-
-        self.segments.extend(
-            SegmentPoly(
-                [
-                    (
-                        button_x_offset,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                    (
-                        button_x_offset,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                ],
-                fill=False,
-            )
-            for i in range(3)
         )
 
         # Waveform on the screen
@@ -1273,6 +1145,7 @@ class AWG(Rectangle):
         ]
         self.segments.append(SegmentPoly(path, fill=True))
 
+        self.label("AWG", loc="center", ofst=(0.65, -0.04))
         self.color(RFcol)
 
 
@@ -1282,10 +1155,6 @@ class Scope(Rectangle):
 
     Parameters
     ----------
-    width : float, default=1.85
-        Width of the OSA.
-    height : float, default=1.1
-        Height of the OSA.
     numN : int, default=1
         Number of anchor points on the North (top) edge.
     numS : int, default=1
@@ -1313,9 +1182,7 @@ class Scope(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(
-        self, width=1.85, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs
-    ):
+    def __init__(self, width=2.6, height=1.1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -1327,10 +1194,10 @@ class Scope(Rectangle):
         )
 
         # Disaplay inside the screen
-        disp_x_offset = 0.2
-        disp_y_offset = -0.35
-        disp_width = 1.1
-        disp_height = 0.7
+        disp_x_offset = 0.1
+        disp_y_offset = -0.45
+        disp_width = 1.2
+        disp_height = 0.9
 
         self.segments.append(
             SegmentPoly(
@@ -1347,45 +1214,6 @@ class Scope(Rectangle):
             )
         )
 
-        # Large knob on the right
-        self.segments.append(SegmentCircle((1.6, 0.35), 0.1, fill=False))
-
-        # Rectangular buttons
-        button_width = 0.1
-        button_height = 0.1
-        button_x_offset = 1.55
-        button_y_offset = -0.4
-        button_spacing = 0.1
-
-        self.segments.extend(
-            SegmentPoly(
-                [
-                    (
-                        button_x_offset,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset + i * (button_height + button_spacing),
-                    ),
-                    (
-                        button_x_offset + button_width,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                    (
-                        button_x_offset,
-                        button_y_offset
-                        + i * (button_height + button_spacing)
-                        + button_height,
-                    ),
-                ],
-                fill=False,
-            )
-            for i in range(3)
-        )
-
         # Waveform on the screen
         def _make_noisy_sine(
             length: int = 120,
@@ -1393,9 +1221,9 @@ class Scope(Rectangle):
             path = []
             for x in range(length):
                 y = 0.5 * disp_height * math.sin(
-                    2 * math.pi * x / length
+                    7 * math.pi * x / length
                 ) + 0.3 * disp_height * (random.random() - 0.5)
-                path.append((x / length * 0.8 * disp_width, 0.55 * y))
+                path.append((x / length * 0.8 * disp_width, 0.6 * y))
             return path
 
         path = _make_noisy_sine()
@@ -1404,6 +1232,8 @@ class Scope(Rectangle):
             for x, y in path
         ]
         self.segments.append(Segment(path))
+
+        self.label("DSO", loc="center", ofst=(0.65, -0.04))
 
 
 class OPM(Rectangle):
