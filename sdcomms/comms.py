@@ -13,15 +13,15 @@ from schemdraw.segments import Segment, SegmentArc, SegmentCircle, SegmentPoly
 from schemdraw.util import linspace
 
 
-OPTcol = "#154d76"
-RFcol = "#8b0000"
-OPTRFcol = "#663399"
+OPTcol = "#1f77b4"
+RFcol = "#d62728"
+OPTRFcol = "#9467bd"
 
 
 class Bend90(Element):
     """A generic bend in a communications schematic.
 
-    Creates a bend with a fixed radius.
+    Creates a bend with a fixed radius.7
 
     Parameters
     ----------
@@ -1379,7 +1379,7 @@ class PD(Rectangle):
 
 
 class LD(Rectangle):
-    """A laser diode element.
+    """A laser diode/device element.
 
     Parameters
     ----------
@@ -1414,7 +1414,7 @@ class LD(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(self, width=1, height=1, numN=1, numS=1, numE=1, numW=1, **kwargs):
+    def __init__(self, width=1.5, height=1.4, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -1426,69 +1426,110 @@ class LD(Rectangle):
             **kwargs,
         )
 
-        self.segments.append(
-            Segment(
-                [
-                    (self.width / 2, -self.height / 2 + 0.1),
-                    (self.width / 2, -self.height / 2 + 0.25),
-                ]
-            )
-        )
-        self.segments.append(
-            SegmentPoly(
-                [
-                    (self.width / 4, -self.height / 2 + 0.25),
-                    (self.width / 2, self.height / 2 - 0.45),
-                    (3 * self.width / 4, -self.height / 2 + 0.25),
-                ],
-                fill=True,
-            )
-        )
-        self.segments.append(
-            Segment(
-                [
-                    (self.width / 4, self.height / 2 - 0.45),
-                    (3 * self.width / 4, self.height / 2 - 0.45),
-                ]
-            )
-        )
-        self.segments.append(
-            Segment(
-                [
-                    (self.width / 2, self.height / 2 - 0.45),
-                    (self.width / 2, self.height / 2 - 0.25),
-                ]
-            )
-        )
+        def _rotate(points, angle_degrees, center=(0, 0), shiftx=0):
+            angle_radians = math.radians(angle_degrees)
+            cos_a = math.cos(angle_radians)
+            sin_a = math.sin(angle_radians)
+            cx, cy = center
 
-        x_ofst = 0.62
-        y_ofst = 0.22
+            rotated_points = []
+            for x, y in points:
+                # Translate to origin
+                x_translated = x - cx
+                y_translated = y - cy
 
-        self.segments.append(
-            Segment(
-                [
-                    (0.0 + x_ofst, 0.0 + y_ofst),
-                    (self.height / 6 + x_ofst, self.height / 6 + y_ofst),
-                ],
-                arrow="->",
-                arrowlength=0.15,
-                arrowwidth=0.09,
-                lw=1.15,
+                # Rotate
+                x_new = x_translated * cos_a - y_translated * sin_a
+                y_new = x_translated * sin_a + y_translated * cos_a
+
+                # Translate back
+                x_final = x_new + cx
+                y_final = y_new + cy
+
+                rotated_points.append((x_final + shiftx, y_final))
+
+            return rotated_points
+
+        ww = 1
+        xshift = 0.25
+        ypos = 0.15
+
+        horiz1 = [(0.1, ypos), (ww - 0.1, ypos)]
+        horiz2 = [(0.2, ypos), (ww - 0.2, ypos)]
+
+        for i in range(4):
+            _horiz1 = _rotate(horiz1, 45 * i, center=(ww / 2, ypos), shiftx=xshift)
+            self.segments.append(Segment(_horiz1))
+            _horiz2 = _rotate(
+                horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
             )
-        )
+            self.segments.append(Segment(_horiz2))
 
-        x_ofst = 0.7
-        y_ofst = 0.15
+        self.label("Laser", loc="center", ofst=(0, -0.5))
 
-        self.segments.append(
-            Segment(
-                [
-                    (0.0 + x_ofst, 0.0 + y_ofst),
-                    (self.height / 6 + x_ofst, self.height / 6 + y_ofst),
-                ],
-                arrow="->",
-                arrowlength=0.15,
-                arrowwidth=0.09,
-                lw=1.15,
-            )
-        )
+        # self.segments.append(
+        #     Segment(
+        #         [
+        #             (self.width / 2, -self.height / 2 + 0.1),
+        #             (self.width / 2, -self.height / 2 + 0.25),
+        #         ]
+        #     )
+        # )
+        # self.segments.append(
+        #     SegmentPoly(
+        #         [
+        #             (self.width / 4, -self.height / 2 + 0.25),
+        #             (self.width / 2, self.height / 2 - 0.45),
+        #             (3 * self.width / 4, -self.height / 2 + 0.25),
+        #         ],
+        #         fill=True,
+        #     )
+        # )
+        # self.segments.append(
+        #     Segment(
+        #         [
+        #             (self.width / 4, self.height / 2 - 0.45),
+        #             (3 * self.width / 4, self.height / 2 - 0.45),
+        #         ]
+        #     )
+        # )
+        # self.segments.append(
+        #     Segment(
+        #         [
+        #             (self.width / 2, self.height / 2 - 0.45),
+        #             (self.width / 2, self.height / 2 - 0.25),
+        #         ]
+        #     )
+        # )
+
+        # x_ofst = 0.62
+        # y_ofst = 0.22
+
+        # self.segments.append(
+        #     Segment(
+        #         [
+        #             (0.0 + x_ofst, 0.0 + y_ofst),
+        #             (self.height / 6 + x_ofst, self.height / 6 + y_ofst),
+        #         ],
+        #         arrow="->",
+        #         arrowlength=0.15,
+        #         arrowwidth=0.09,
+        #         lw=1.15,
+        #     )
+        # )
+
+        # x_ofst = 0.7
+        # y_ofst = 0.15
+
+        # self.segments.append(
+        #     Segment(
+        #         [
+        #             (0.0 + x_ofst, 0.0 + y_ofst),
+        #             (self.height / 6 + x_ofst, self.height / 6 + y_ofst),
+        #         ],
+        #         arrow="->",
+        #         arrowlength=0.15,
+        #         arrowwidth=0.09,
+        #         lw=1.15,
+        #     )
+        # )
