@@ -184,8 +184,8 @@ class Termination(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.segments.append(Segment([(0, 0), (0.0, 0.2)], lw=2))
-        self.segments.append(Segment([(0, 0), (0.0, -0.2)], lw=2))
+        self.segments.append(Segment([(-0.1, -0.1), (0.1, 0.1)]))
+        self.segments.append(Segment([(-0.1, 0.1), (0.1, -0.1)]))
 
         self.anchors["in"] = (0, 0)
         self.anchors["out"] = (0, 0)
