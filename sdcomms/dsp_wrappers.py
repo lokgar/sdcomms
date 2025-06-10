@@ -1,5 +1,5 @@
 from schemdraw.dsp import Filter as DSPFilter
-from .comms import OPTcol, OPTfill
+from .comms import OPTcol
 
 
 class Filter(DSPFilter):
@@ -17,6 +17,5 @@ class Filter(DSPFilter):
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault("fill", OPTfill)
-        kwargs.setdefault("color", OPTcol)
+        kwargs.setdefault("fill", "white")
         super().__init__(*args, **kwargs)

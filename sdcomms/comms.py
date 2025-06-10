@@ -14,11 +14,8 @@ from schemdraw.util import linspace
 
 
 OPTcol = "#154d76"
-OPTfill = "white"
 RFcol = "#8b0000"
-RFfill = "white"
 OPTRFcol = "#663399"
-OPTRFfill = "white"
 
 
 class Bend90(Element):
@@ -46,8 +43,6 @@ class Bend90(Element):
         self.anchors["out"] = (0, radius)
         self.elmparams["drop"] = (0, radius)
 
-        self.color(OPTcol)
-
 
 class Bend180(Element):
     """A generic bend in a communications schematic.
@@ -74,8 +69,6 @@ class Bend180(Element):
         self.anchors["in"] = (radius, 0)
         self.anchors["out"] = (-radius, 0)
         self.elmparams["drop"] = (-radius, 0)
-
-        self.color(OPTcol)
 
 
 class Rectangle(Element):
@@ -191,10 +184,8 @@ class Termination(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.segments.append(Segment([(0, 0), (0.0, 0.2)], color=OPTcol, lw=2))
-        self.segments.append(Segment([(0, 0), (0.0, -0.2)], color=OPTcol, lw=2))
-        # self.segments.append(Segment([(0, 0), (-0.1, 0.1)], color=OPTcol))
-        # self.segments.append(Segment([(0, 0), (0.1, -0.1)], color=OPTcol))
+        self.segments.append(Segment([(0, 0), (0.0, 0.2)], lw=2))
+        self.segments.append(Segment([(0, 0), (0.0, -0.2)], lw=2))
 
         self.anchors["in"] = (0, 0)
         self.anchors["out"] = (0, 0)
@@ -228,7 +219,6 @@ class FBG(Element):
                     (0, 0.5 / 2),
                     (0, -0.5 / 2),
                 ],
-                color=OPTcol,
             )
         )
 
@@ -242,8 +232,7 @@ class FBG(Element):
                         (0.25 + i * 0.2, 0.5 / 2),
                         (0.15 + i * 0.2, 0.5 / 2),
                     ],
-                    fill=OPTcol,
-                    color=OPTcol,
+                    fill=True,
                 )
             )
 
@@ -256,8 +245,7 @@ class FBG(Element):
                         (0.25 + i * 0.2, -0.5 / 2),
                         (0.15 + i * 0.2, -0.5 / 2),
                     ],
-                    fill=OPTcol,
-                    color=OPTcol,
+                    fill=True,
                 )
             )
 
@@ -265,7 +253,7 @@ class FBG(Element):
         self.anchors["out"] = (1, 0)
 
         self.elmparams["drop"] = (1, 0)
-        self.label("FBG", loc="center", ofst=(0, -0.03), color=OPTcol)
+        self.label("FBG", loc="center", ofst=(0, -0.03))
 
 
 class MUX(Element):
@@ -306,7 +294,7 @@ class MUX(Element):
                     (0, -height1 / 2),
                     (0, height1 / 2),
                 ],
-                fill=OPTfill,
+                fill="white",
             )
         )
 
@@ -326,7 +314,6 @@ class MUX(Element):
         self.elmparams["lblloc"] = "center"
         self.elmparams["lblofst"] = 0
 
-        self.color(OPTcol)
         self.label("MUX", loc="center")
 
 
@@ -336,7 +323,7 @@ class Circulator(Element):
 
         radius = 0.5
 
-        self.segments.append(SegmentCircle((0, 0), radius, fill=OPTfill))
+        self.segments.append(SegmentCircle((0, 0), radius, fill="white"))
         self.segments.append(SegmentArc((0, 0), 1.2 * radius, 1.2 * radius, -70, 200))
 
         def _rotate(points, angle_degrees):
@@ -362,15 +349,13 @@ class Circulator(Element):
             )
             for x, y in arrow_rotated
         ]
-        self.segments.append(SegmentPoly(arrow_rotated, fill=OPTcol))
+        self.segments.append(SegmentPoly(arrow_rotated, fill=True))
 
         self.anchors["1"] = (-radius, 0)
         self.anchors["2"] = (radius, 0)
         self.anchors["3"] = (0, -radius)
 
         self.elmparams["drop"] = (radius, 0)
-
-        self.color(OPTcol)
 
 
 class BS(Rectangle):
@@ -417,13 +402,12 @@ class BS(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=OPTfill,
+            fillcol="white",
             **kwargs,
         )
         self.segments.append(
             Segment([(0, self.height / 2), (self.width, -self.height / 2)])
         )
-        self.color(OPTcol)
 
 
 class CouplerDot(Rectangle):
@@ -445,10 +429,9 @@ class CouplerDot(Rectangle):
             numS=1,
             numE=1,
             numW=1,
-            fillcol=OPTcol,
             **kwargs,
         )
-        self.color(OPTcol)
+        self.elmparams["drop"] = (0, 0)
 
 
 class CouplerCirc(Element):
@@ -468,14 +451,13 @@ class CouplerCirc(Element):
         x = [(w / 2) * math.cos(t0) + w / 2 for t0 in t]
         x[-1] = x[0]
         y[-1] = y[0]  # Ensure the path is actually closed
-        self.segments.append(Segment(list(zip(x, y)), fill=OPTfill))
+        self.segments.append(Segment(list(zip(x, y)), fill="white"))
 
         self.anchors["N0"] = (w / 2, h / 2)
         self.anchors["S0"] = (w / 2, -h / 2)
         self.anchors["E0"] = (w, 0)
         self.anchors["W0"] = (0, 0)
         self.elmparams["drop"] = (w, 0)
-        self.color(OPTcol)
 
 
 class Fiber(Rectangle):
@@ -496,14 +478,13 @@ class Fiber(Rectangle):
         super().__init__(
             width=1.1,
             height=0.9,
-            fillcol=OPTfill,
+            fillcol="white",
             numE=1,
             numW=1,
             numN=1,
             numS=1,
             **kwargs,
         )
-        self.color(OPTcol)
 
         self.radius = 0.3
         self.length = 1
@@ -566,7 +547,6 @@ class PolCtrl(Element):
         self.elmparams["drop"] = (self.length, 0)
         self.anchors["in"] = (0, 0)
         self.anchors["out"] = (self.length, 0)
-        self.color(OPTcol)
 
 
 class VOA(Element):
@@ -592,7 +572,7 @@ class VOA(Element):
                     (0, -self.height / 2),
                     (0, self.height / 2),
                 ],
-                fill=OPTfill,
+                fill="white",
             )
         )
 
@@ -615,7 +595,6 @@ class VOA(Element):
         self.elmparams["drop"] = (self.width, 0)
         self.anchors["W"] = (0, 0)
         self.anchors["E"] = (self.width, 0)
-        self.color(OPTcol)
 
 
 class PM(Rectangle):
@@ -671,7 +650,7 @@ class PM(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=OPTfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -683,7 +662,6 @@ class PM(Rectangle):
         # )
 
         self.label("PM", loc="center", ofst=(0, -0.035))
-        self.color(OPTcol)
 
 
 class MZM(Rectangle):
@@ -742,7 +720,7 @@ class MZM(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=OPTRFfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -772,7 +750,6 @@ class MZM(Rectangle):
         self.segments.extend(_mzm(0, 0, a, cx, cy, d))
 
         self.label(label, loc="center", ofst=(0, -0.04))
-        self.color(OPTRFcol)
 
 
 class IQM(Rectangle):
@@ -825,7 +802,7 @@ class IQM(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=OPTRFfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -879,8 +856,6 @@ class IQM(Rectangle):
             schemdraw.SegmentText((self.width / 2, -self.height / 4 - 0.02), "Q")
         )
 
-        self.color(OPTRFcol)
-
 
 class OSA(Rectangle):
     """An optical spectrum analyzer element.
@@ -922,7 +897,7 @@ class OSA(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=OPTfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -966,7 +941,6 @@ class OSA(Rectangle):
         self.segments.append(Segment(path))
 
         self.label("OSA", loc="center", ofst=(0.65, -0.04))
-        self.color(OPTcol)
 
 
 class ESA(Rectangle):
@@ -1009,7 +983,7 @@ class ESA(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=RFfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -1053,7 +1027,6 @@ class ESA(Rectangle):
         self.segments.append(Segment(path))
 
         self.label("ESA", loc="center", ofst=(0.65, -0.04))
-        self.color(RFcol)
 
 
 class AWG(Rectangle):
@@ -1096,7 +1069,7 @@ class AWG(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=RFfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -1146,12 +1119,10 @@ class AWG(Rectangle):
         self.segments.append(SegmentPoly(path, fill=True))
 
         self.label("AWG", loc="center", ofst=(0.65, -0.04))
-        self.color(RFcol)
 
 
 class Scope(Rectangle):
     """An oscilloscope element.
-    Color defined by user based on the type of scope.
 
     Parameters
     ----------
@@ -1280,7 +1251,7 @@ class OPM(Rectangle):
         numS=1,
         numE=1,
         numW=1,
-        fillcol=OPTfill,
+        fillcol="white",
         **kwargs,
     ):
         super().__init__(
@@ -1323,12 +1294,9 @@ class OPM(Rectangle):
         #     SegmentCircle((self.width / 2, -self.height / 5), 0.05, fill=True)
         # )
 
-        self.color(OPTcol)
-
 
 class PD(Rectangle):
     """A photodetector element.
-    Color defined by user based on the type of photodetector.
 
     Parameters
     ----------
@@ -1454,7 +1422,7 @@ class LD(Rectangle):
             numS=numS,
             numE=numE,
             numW=numW,
-            fillcol=OPTfill,
+            fillcol="white",
             **kwargs,
         )
 
@@ -1524,5 +1492,3 @@ class LD(Rectangle):
                 lw=1.15,
             )
         )
-
-        self.color(OPTcol)

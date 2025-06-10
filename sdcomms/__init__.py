@@ -23,11 +23,8 @@ from .comms import (
     LD,
     MUX,
     OPTcol,
-    OPTfill,
     RFcol,
-    RFfill,
     OPTRFcol,
-    OPTRFfill,
 )
 from schemdraw.dsp import (
     Circle,
