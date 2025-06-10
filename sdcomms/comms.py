@@ -210,50 +210,17 @@ class FBG(Element):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.segments.append(
-            SegmentPoly(
-                [
-                    (0, -0.5 / 2),
-                    (1, -0.5 / 2),
-                    (1, 0.5 / 2),
-                    (0, 0.5 / 2),
-                    (0, -0.5 / 2),
-                ],
-            )
-        )
+        self.segments.append(Segment([(0, 0), (0.95, 0)]))
 
-        for i in range(4):
+        for i in range(6):
             self.segments.append(
-                SegmentPoly(
-                    [
-                        (0.15 + i * 0.2, 0.5 / 2),
-                        (0.15 + i * 0.2, 0.5 / 2 + 0.075),
-                        (0.25 + i * 0.2, 0.5 / 2 + 0.075),
-                        (0.25 + i * 0.2, 0.5 / 2),
-                        (0.15 + i * 0.2, 0.5 / 2),
-                    ],
-                    fill=True,
-                )
-            )
-
-            self.segments.append(
-                SegmentPoly(
-                    [
-                        (0.15 + i * 0.2, -0.5 / 2),
-                        (0.15 + i * 0.2, -0.5 / 2 - 0.075),
-                        (0.25 + i * 0.2, -0.5 / 2 - 0.075),
-                        (0.25 + i * 0.2, -0.5 / 2),
-                        (0.15 + i * 0.2, -0.5 / 2),
-                    ],
-                    fill=True,
-                )
+                Segment([(0.1 + i * 0.15, -0.2), (0.1 + i * 0.15, 0.2)])
             )
 
         self.anchors["in"] = (0, 0)
-        self.anchors["out"] = (1, 0)
+        self.anchors["out"] = (0.95, 0)
 
-        self.elmparams["drop"] = (1, 0)
-        self.label("FBG", loc="center", ofst=(0, -0.03))
+        self.elmparams["drop"] = (0.95, 0)
 
 
 class MUX(Element):
@@ -261,6 +228,9 @@ class MUX(Element):
 
     Parameters
     ----------
+    height1 : float, default=2.2
+    height2 : float, default=1
+    width : float, default=1.1
     numE : int, default=1
         Number of anchor points on the East (right) edge.
     numW : int, default=1
@@ -278,21 +248,20 @@ class MUX(Element):
         Evenly spaced along the edge.
     """
 
-    def __init__(self, numE=1, numW=1, **kwargs):
+    def __init__(self, height1=2.2, height2=1, width=1.1, numE=1, numW=1, **kwargs):
         super().__init__(**kwargs)
-
-        height1 = 2.5
-        height2 = 1
-        width = 1
+        self.height1 = height1
+        self.height2 = height2
+        self.width = width
 
         self.segments.append(
             SegmentPoly(
                 [
-                    (0, height1 / 2),
-                    (width, height2 / 2),
-                    (width, -height2 / 2),
-                    (0, -height1 / 2),
-                    (0, height1 / 2),
+                    (0, self.height1 / 2),
+                    (self.width, self.height2 / 2),
+                    (self.width, -self.height2 / 2),
+                    (0, -self.height1 / 2),
+                    (0, self.height1 / 2),
                 ],
                 fill="white",
             )
@@ -300,21 +269,21 @@ class MUX(Element):
 
         for i in range(numE):
             self.anchors[f"E{i}"] = (
-                width,
-                ((i + 1) * height2 / (numE + 1)) - height2 / 2,
+                self.width,
+                ((i + 1) * self.height2 / (numE + 1)) - self.height2 / 2,
             )
 
         for i in range(numW):
             self.anchors[f"W{i}"] = (
                 0,
-                ((i + 1) * height1 / (numW + 1)) - height1 / 2,
+                ((i + 1) * self.height1 / (numW + 1)) - self.height1 / 2,
             )
 
         self.elmparams["drop"] = self.anchors[f"E{numE - 1}"]
         self.elmparams["lblloc"] = "center"
         self.elmparams["lblofst"] = 0
 
-        self.label("MUX", loc="center")
+        # self.label("MUX", loc="center")
 
 
 class Circulator(Element):
@@ -636,7 +605,7 @@ class PM(Rectangle):
     def __init__(
         self,
         width=1,
-        height=0.5,
+        height=0.7,
         numN=1,
         numS=1,
         numE=1,
@@ -655,10 +624,26 @@ class PM(Rectangle):
         )
 
         # self.segments.append(
-        #     Segment([(0, self.height / 3.25), (self.width, self.height / 3.25)])
+        #     SegmentPoly(
+        #         [
+        #             (0, self.height / 2),
+        #             (self.width, self.height / 2),
+        #             (self.width, self.height / 2 + 0.04),
+        #             (0, self.height / 2 + 0.04),
+        #         ],
+        #         fill=True,
+        #     )
         # )
         # self.segments.append(
-        #     Segment([(0, -self.height / 3.25), (self.width, -self.height / 3.25)])
+        #     SegmentPoly(
+        #         [
+        #             (0, -self.height / 2),
+        #             (self.width, -self.height / 2),
+        #             (self.width, -(self.height / 2 + 0.04)),
+        #             (0, -(self.height / 2 + 0.04)),
+        #         ],
+        #         fill=True,
+        #     )
         # )
 
         self.label("PM", loc="center", ofst=(0, -0.035))
@@ -704,7 +689,7 @@ class MZM(Rectangle):
 
     def __init__(
         self,
-        width=1.6,
+        width=1.8,
         height=1,
         label="MZM",
         numN=1,
@@ -725,7 +710,7 @@ class MZM(Rectangle):
         )
 
         a = 0.15
-        d = 0.7
+        d = 0.9
         cx = 0.3
         cy = 0.3
 
@@ -849,11 +834,15 @@ class IQM(Rectangle):
         )
 
         self.segments.append(
-            schemdraw.SegmentText((self.width / 2, self.height / 4 - 0.06), "I")
+            schemdraw.SegmentText(
+                (self.width / 2, self.height / 4 - 0.06), "I", fontsize=16
+            )
         )
 
         self.segments.append(
-            schemdraw.SegmentText((self.width / 2, -self.height / 4 - 0.02), "Q")
+            schemdraw.SegmentText(
+                (self.width / 2, -self.height / 4 - 0.00), "Q", fontsize=16
+            )
         )
 
 
@@ -1245,7 +1234,7 @@ class OPM(Rectangle):
 
     def __init__(
         self,
-        width=1,
+        width=1.2,
         height=1,
         numN=1,
         numS=1,
@@ -1280,7 +1269,7 @@ class OPM(Rectangle):
         # Arrow
         self.segments.append(
             Segment(
-                [(self.width / 2, 0), (0.7, 0.325)],
+                [(self.width / 2, 0), (0.8, 0.325)],
                 arrow="->",
                 arrowlength=0.2,
                 arrowwidth=0.15,
@@ -1345,7 +1334,7 @@ class PD(Rectangle):
         self.segments.append(
             Segment(
                 [
-                    (self.width / 2, -self.height / 2),
+                    (self.width / 2, -self.height / 2 + 0.1),
                     (self.width / 2, -self.height / 2 + 0.3),
                 ]
             )
@@ -1372,7 +1361,7 @@ class PD(Rectangle):
             Segment(
                 [
                     (self.width / 2, self.height / 2 - 0.35),
-                    (self.width / 2, self.height / 2),
+                    (self.width / 2, self.height / 2 - 0.1),
                 ]
             )
         )
@@ -1414,7 +1403,7 @@ class LD(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(self, width=1.5, height=1.4, numN=1, numS=1, numE=1, numW=1, **kwargs):
+    def __init__(self, width=1.5, height=1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -1451,21 +1440,28 @@ class LD(Rectangle):
             return rotated_points
 
         ww = 1
-        xshift = 0.25
-        ypos = 0.15
+        xshift = 0
+        ypos = 0
 
         horiz1 = [(0.1, ypos), (ww - 0.1, ypos)]
         horiz2 = [(0.2, ypos), (ww - 0.2, ypos)]
 
         for i in range(4):
-            _horiz1 = _rotate(horiz1, 45 * i, center=(ww / 2, ypos), shiftx=xshift)
-            self.segments.append(Segment(_horiz1))
-            _horiz2 = _rotate(
-                horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
-            )
-            self.segments.append(Segment(_horiz2))
+            if i == 0:
+                self.segments.append(Segment([(0.1, ypos), (self.width - 0.1, ypos)]))
+                _horiz2 = _rotate(
+                    horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
+                )
+                self.segments.append(Segment(_horiz2))
+            else:
+                _horiz1 = _rotate(horiz1, 45 * i, center=(ww / 2, ypos), shiftx=xshift)
+                self.segments.append(Segment(_horiz1))
+                _horiz2 = _rotate(
+                    horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
+                )
+                self.segments.append(Segment(_horiz2))
 
-        self.label("Laser", loc="center", ofst=(0, -0.5))
+        # self.label("Laser", loc="center", ofst=(0, -0.5))
 
         # self.segments.append(
         #     Segment(
