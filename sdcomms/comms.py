@@ -1461,71 +1461,37 @@ class LD(Rectangle):
                 )
                 self.segments.append(Segment(_horiz2))
 
-        # self.label("Laser", loc="center", ofst=(0, -0.5))
 
-        # self.segments.append(
-        #     Segment(
-        #         [
-        #             (self.width / 2, -self.height / 2 + 0.1),
-        #             (self.width / 2, -self.height / 2 + 0.25),
-        #         ]
-        #     )
-        # )
-        # self.segments.append(
-        #     SegmentPoly(
-        #         [
-        #             (self.width / 4, -self.height / 2 + 0.25),
-        #             (self.width / 2, self.height / 2 - 0.45),
-        #             (3 * self.width / 4, -self.height / 2 + 0.25),
-        #         ],
-        #         fill=True,
-        #     )
-        # )
-        # self.segments.append(
-        #     Segment(
-        #         [
-        #             (self.width / 4, self.height / 2 - 0.45),
-        #             (3 * self.width / 4, self.height / 2 - 0.45),
-        #         ]
-        #     )
-        # )
-        # self.segments.append(
-        #     Segment(
-        #         [
-        #             (self.width / 2, self.height / 2 - 0.45),
-        #             (self.width / 2, self.height / 2 - 0.25),
-        #         ]
-        #     )
-        # )
+class Mirror(Rectangle):
+    """A mirror element.
 
-        # x_ofst = 0.62
-        # y_ofst = 0.22
+    Parameters
+    ----------
+    width : float, default=1
+        Width of the mirror.
+    height : float, default=1
+        Height of the mirror.
+    **kwargs :
+        Other Element keyword arguments.
+    """
 
-        # self.segments.append(
-        #     Segment(
-        #         [
-        #             (0.0 + x_ofst, 0.0 + y_ofst),
-        #             (self.height / 6 + x_ofst, self.height / 6 + y_ofst),
-        #         ],
-        #         arrow="->",
-        #         arrowlength=0.15,
-        #         arrowwidth=0.09,
-        #         lw=1.15,
-        #     )
-        # )
+    def __init__(self, width=0.3, height=1, **kwargs):
+        super().__init__(
+            width=width,
+            height=height,
+            fillcol="white",
+            **kwargs,
+        )
 
-        # x_ofst = 0.7
-        # y_ofst = 0.15
-
-        # self.segments.append(
-        #     Segment(
-        #         [
-        #             (0.0 + x_ofst, 0.0 + y_ofst),
-        #             (self.height / 6 + x_ofst, self.height / 6 + y_ofst),
-        #         ],
-        #         arrow="->",
-        #         arrowlength=0.15,
-        #         arrowwidth=0.09,
-        #         lw=1.15,
-        #     )
-        # )
+        self.segments.append(
+            SegmentPoly(
+                [
+                    (2 / 3 * self.width, self.height / 2),
+                    (self.width, self.height / 2),
+                    (self.width, -self.height / 2),
+                    (2 / 3 * self.width, -self.height / 2),
+                    (2 / 3 * self.width, self.height / 2),
+                ],
+                fill="black",
+            )
+        )

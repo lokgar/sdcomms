@@ -22,6 +22,7 @@ from .comms import (
     PD,
     LD,
     MUX,
+    Mirror,
     OPTcol,
     RFcol,
     OPTRFcol,
@@ -78,4 +79,5 @@ __all__ = [
     "ArcLoop",
     "ArcN",
     "ArcZ",
+    "Mirror",
 ]
