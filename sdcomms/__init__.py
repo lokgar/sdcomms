@@ -59,7 +59,6 @@ __all__ = [
     "OSA",
     "ESA",
     "AWG",
-    "Amp",
     "FBG",
     "Scope",
     "OPM",
