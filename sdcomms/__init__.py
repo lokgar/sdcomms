@@ -5,6 +5,7 @@ from .comms import (
     Rectangle,
     Circulator,
     FBG,
+    Amp,
     CouplerDot,
     CouplerCirc,
     BS,
@@ -32,7 +33,6 @@ from schemdraw.dsp import (
     Square,
     Arrow,
     Line,
-    Amp,
     Adc,
     Dac,
 )
@@ -59,6 +59,7 @@ __all__ = [
     "OSA",
     "ESA",
     "AWG",
+    "Amp",
     "FBG",
     "Scope",
     "OPM",

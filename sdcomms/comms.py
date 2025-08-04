@@ -193,6 +193,26 @@ class Termination(Element):
         self.elmparams["drop"] = (0, 0)
 
 
+class Amp(Element):
+    """Amplifier
+
+    Anchors:
+        * in
+        * out
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        amph = 1.0
+        ampl = 0.75
+        self.segments.append(
+            SegmentPoly([(0, 0), (0, -amph / 2), (ampl, 0), (0, amph / 2), (0, 0)])
+        )
+        self.elmparams["drop"] = (ampl, 0)
+        self.anchors["in"] = (0, 0)
+        self.anchors["out"] = (ampl, 0)
+
+
 class FBG(Element):
     """A fiber Bragg grating element.
 
@@ -446,7 +466,7 @@ class Fiber(Rectangle):
     def __init__(self, **kwargs):
         super().__init__(
             width=1.1,
-            height=0.9,
+            height=1,
             fillcol="white",
             numE=1,
             numW=1,
