@@ -383,7 +383,7 @@ class BS(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(self, width=0.6, height=0.6, numN=1, numS=1, numE=1, numW=1, **kwargs):
+    def __init__(self, width=1, height=1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -549,8 +549,8 @@ class VOA(Element):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.width = 0.7
-        self.height = 0.7
+        self.width = 1
+        self.height = 1
 
         self.segments.append(
             SegmentPoly(
@@ -624,8 +624,8 @@ class PM(Rectangle):
 
     def __init__(
         self,
-        width=1,
-        height=0.7,
+        width=1.2,
+        height=1,
         numN=1,
         numS=1,
         numE=1,
