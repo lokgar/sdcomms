@@ -10,3 +10,6 @@ dependencies = [
     "matplotlib>=3.10.1",
     "schemdraw>=0.20",
 ]
+
+[tool.setuptools]
+packages = ["sdcomms"]
