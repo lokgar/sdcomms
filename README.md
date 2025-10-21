@@ -2,7 +2,6 @@
 
 A simple library of components I am using to create schematics with the **schemdraw**.
 
-The only dependency for this library is the schemdraw.
 To install the library with `uv`:
 
 ```bash
