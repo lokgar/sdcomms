@@ -37,7 +37,7 @@ from schemdraw.dsp import (
     Dac,
 )
 
-from .dsp_wrappers import Filter
+from .dsp_wrappers import Filter, Isolator
 
 from schemdraw.elements import Arc2, Arc3, ArcLoop, ArcN, ArcZ
 
@@ -80,4 +80,5 @@ __all__ = [
     "ArcN",
     "ArcZ",
     "Mirror",
+    "Isolator",
 ]

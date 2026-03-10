@@ -1,4 +1,5 @@
 from schemdraw.dsp import Filter as DSPFilter
+from schemdraw.dsp import Isolator as DSPIsolator
 from .comms import OPTcol
 
 
@@ -8,6 +9,21 @@ class Filter(DSPFilter):
     Args:
         response: Filter response ('lp', 'bp', 'hp', or 'notch') for
             low-pass, band-pass, high-pass, and notch/band-stop filters
+
+    Anchors:
+        * N
+        * S
+        * E
+        * W
+    """
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("fill", "white")
+        super().__init__(*args, **kwargs)
+
+
+class Isolator(DSPIsolator):
+    """Isolator
 
     Anchors:
         * N
