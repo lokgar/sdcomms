@@ -1387,8 +1387,103 @@ class PD(Rectangle):
         )
 
 
+# class LD(Rectangle):
+#     """A laser diode/device element.
+
+#     Parameters
+#     ----------
+#     width : float, default=1
+#         Width of the photodetector.
+#     height : float, default=1
+#         Height of the photodetector.
+#     numN : int, default=1
+#         Number of anchor points on the North (top) edge.
+#     numS : int, default=1
+#         Number of anchor points on the South (bottom) edge.
+#     numE : int, default=1
+#         Number of anchor points on the East (right) edge.
+#     numW : int, default=1
+#         Number of anchor points on the West (left) edge.
+#     **kwargs :
+#         Other Element keyword arguments.
+
+#     Anchors
+#     -------
+#     N{i} : tuple
+#         Points along the top edge, from left to right, where i goes from 0 to numN-1.
+#         Evenly spaced along the edge.
+#     S{i} : tuple
+#         Points along the bottom edge, from left to right, where i goes from 0 to numS-1.
+#         Evenly spaced along the edge.
+#     E{i} : tuple
+#         Points along the right edge, from top to bottom, where i goes from 0 to numE-1.
+#         Evenly spaced along the edge.
+#     W{i} : tuple
+#         Points along the left edge, from top to bottom, where i goes from 0 to numW-1.
+#         Evenly spaced along the edge.
+#     """
+
+#     def __init__(self, width=1.5, height=1, numN=1, numS=1, numE=1, numW=1, **kwargs):
+#         super().__init__(
+#             width=width,
+#             height=height,
+#             numN=numN,
+#             numS=numS,
+#             numE=numE,
+#             numW=numW,
+#             fillcol="white",
+#             **kwargs,
+#         )
+
+#         def _rotate(points, angle_degrees, center=(0, 0), shiftx=0):
+#             angle_radians = math.radians(angle_degrees)
+#             cos_a = math.cos(angle_radians)
+#             sin_a = math.sin(angle_radians)
+#             cx, cy = center
+
+#             rotated_points = []
+#             for x, y in points:
+#                 # Translate to origin
+#                 x_translated = x - cx
+#                 y_translated = y - cy
+
+#                 # Rotate
+#                 x_new = x_translated * cos_a - y_translated * sin_a
+#                 y_new = x_translated * sin_a + y_translated * cos_a
+
+#                 # Translate back
+#                 x_final = x_new + cx
+#                 y_final = y_new + cy
+
+#                 rotated_points.append((x_final + shiftx, y_final))
+
+#             return rotated_points
+
+#         ww = 1
+#         xshift = 0
+#         ypos = 0
+
+#         horiz1 = [(0.1, ypos), (ww - 0.1, ypos)]
+#         horiz2 = [(0.2, ypos), (ww - 0.2, ypos)]
+
+#         for i in range(4):
+#             if i == 0:
+#                 self.segments.append(Segment([(0.1, ypos), (self.width - 0.1, ypos)]))
+#                 _horiz2 = _rotate(
+#                     horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
+#                 )
+#                 self.segments.append(Segment(_horiz2))
+#             else:
+#                 _horiz1 = _rotate(horiz1, 45 * i, center=(ww / 2, ypos), shiftx=xshift)
+#                 self.segments.append(Segment(_horiz1))
+#                 _horiz2 = _rotate(
+#                     horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
+#                 )
+#                 self.segments.append(Segment(_horiz2))
+
+
 class LD(Rectangle):
-    """A laser diode/device element.
+    """A laser diode element.
 
     Parameters
     ----------
@@ -1423,7 +1518,7 @@ class LD(Rectangle):
         Evenly spaced along the edge.
     """
 
-    def __init__(self, width=1.5, height=1, numN=1, numS=1, numE=1, numW=1, **kwargs):
+    def __init__(self, width=1, height=1, numN=1, numS=1, numE=1, numW=1, **kwargs):
         super().__init__(
             width=width,
             height=height,
@@ -1435,51 +1530,72 @@ class LD(Rectangle):
             **kwargs,
         )
 
-        def _rotate(points, angle_degrees, center=(0, 0), shiftx=0):
-            angle_radians = math.radians(angle_degrees)
-            cos_a = math.cos(angle_radians)
-            sin_a = math.sin(angle_radians)
-            cx, cy = center
+        self.segments.append(
+            Segment(
+                [
+                    (0.1, 0),
+                    (0.3, 0),
+                ]
+            )
+        )
+        self.segments.append(
+            SegmentPoly(
+                [
+                    (0.3, 0.22),
+                    (0.3, -0.22),
+                    (0.7, 0),
+                ],
+                fill=True,
+            )
+        )
+        self.segments.append(
+            Segment(
+                [
+                    (0.7, 0.22),
+                    (0.7, -0.22),
+                ]
+            )
+        )
+        self.segments.append(
+            Segment(
+                [
+                    (0.7, 0),
+                    (0.9, 0),
+                ]
+            )
+        )
 
-            rotated_points = []
-            for x, y in points:
-                # Translate to origin
-                x_translated = x - cx
-                y_translated = y - cy
+        x_ofst = 0.43
+        y_ofst = 0.24
 
-                # Rotate
-                x_new = x_translated * cos_a - y_translated * sin_a
-                y_new = x_translated * sin_a + y_translated * cos_a
+        self.segments.append(
+            Segment(
+                [
+                    (0.0 + x_ofst, 0.0 + y_ofst),
+                    (self.height / 6 + x_ofst, self.height / 5 + y_ofst),
+                ],
+                arrow="->",
+                arrowlength=0.15,
+                arrowwidth=0.09,
+                lw=1.15,
+            )
+        )
 
-                # Translate back
-                x_final = x_new + cx
-                y_final = y_new + cy
+        x_ofst = 0.50
+        y_ofst = 0.17
 
-                rotated_points.append((x_final + shiftx, y_final))
-
-            return rotated_points
-
-        ww = 1
-        xshift = 0
-        ypos = 0
-
-        horiz1 = [(0.1, ypos), (ww - 0.1, ypos)]
-        horiz2 = [(0.2, ypos), (ww - 0.2, ypos)]
-
-        for i in range(4):
-            if i == 0:
-                self.segments.append(Segment([(0.1, ypos), (self.width - 0.1, ypos)]))
-                _horiz2 = _rotate(
-                    horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
-                )
-                self.segments.append(Segment(_horiz2))
-            else:
-                _horiz1 = _rotate(horiz1, 45 * i, center=(ww / 2, ypos), shiftx=xshift)
-                self.segments.append(Segment(_horiz1))
-                _horiz2 = _rotate(
-                    horiz2, (45 / 2) + 45 * i, center=(ww / 2, ypos), shiftx=xshift
-                )
-                self.segments.append(Segment(_horiz2))
+        self.segments.append(
+            Segment(
+                [
+                    (0.0 + x_ofst, 0.0 + y_ofst),
+                    (self.height / 6 + x_ofst, self.height / 5 + y_ofst),
+                ],
+                arrow="->",
+                arrowlength=0.15,
+                arrowwidth=0.09,
+                lw=1.15,
+            )
+        )
 
 
 class Mirror(Rectangle):
