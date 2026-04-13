@@ -5,7 +5,6 @@ from typing import Sequence, Tuple
 
 import schemdraw
 import schemdraw.elements
-from schemdraw import dsp
 
 from schemdraw.elements import Element
 from schemdraw.segments import Segment, SegmentArc, SegmentCircle, SegmentPoly
