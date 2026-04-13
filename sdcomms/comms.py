@@ -509,33 +509,57 @@ class PolCtrl(Element):
     -------
     in : The input point of the polarization controller
     out : The output point of the polarization controller
+    N: Top point of the polarization controller
+    S: Bottom point of the polarization controller
     """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.radius = 0.19
+        self.radius = 0.132
         self.length = self.radius * 6
-        self.segments.append(Segment([(0, 0), (self.length, 0)]))
+        self.width = 1
+        self.height = 1
+
+        dy = -0.15
+
+        self.segments.append(
+            SegmentPoly(
+                [
+                    (0, self.height / 2),
+                    (self.width, self.height / 2),
+                    (self.width, -self.height / 2),
+                    (0, -self.height / 2),
+                    (0, self.height / 2),
+                ],
+                fill="white",
+            )
+        )
+
+        self.segments.append(Segment([(0.1, dy), (0.9, dy)]))
         self.segments.append(
             SegmentCircle(
-                (self.length / 2 - 2 * self.radius, self.radius),
+                (self.length / 2 - 2 * self.radius + 0.1, self.radius + dy),
                 self.radius,
                 fill=False,
             )
         )
         self.segments.append(
-            SegmentCircle((self.length / 2, self.radius), self.radius, fill=False)
+            SegmentCircle(
+                (self.length / 2 + 0.1, self.radius + dy), self.radius, fill=False
+            )
         )
         self.segments.append(
             SegmentCircle(
-                (self.length / 2 + 2 * self.radius, self.radius),
+                (self.length / 2 + 2 * self.radius + 0.1, self.radius + dy),
                 self.radius,
                 fill=False,
             )
         )
-        self.elmparams["drop"] = (self.length, 0)
+        self.elmparams["drop"] = (self.width, 0)
         self.anchors["in"] = (0, 0)
-        self.anchors["out"] = (self.length, 0)
+        self.anchors["out"] = (self.width, 0)
+        self.anchors["N"] = (self.width / 2, self.height / 2)
+        self.anchors["S"] = (self.width / 2, -self.height / 2)
 
 
 class VOA(Element):
@@ -545,6 +569,8 @@ class VOA(Element):
     -------
     W : The input point of the VOA
     E : The output point of the VOA
+    N : The top point of the VOA
+    S : The bottom point of the VOA
     """
 
     def __init__(self, **kwargs):
@@ -584,6 +610,8 @@ class VOA(Element):
         self.elmparams["drop"] = (self.width, 0)
         self.anchors["W"] = (0, 0)
         self.anchors["E"] = (self.width, 0)
+        self.anchors["N"] = (self.width / 2, self.height / 2)
+        self.anchors["S"] = (self.width / 2, -self.height / 2)
 
 
 class PM(Rectangle):
