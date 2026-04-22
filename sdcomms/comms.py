@@ -820,7 +820,6 @@ class IQM(Rectangle):
         self,
         width=2.5,
         height=1.3,
-        label="IQM",
         numN=1,
         numS=1,
         numE=1,
@@ -880,17 +879,12 @@ class IQM(Rectangle):
             Segment([(3 * a + bx + 2 * cx + d, -by), (3 * a + 2 * bx + 2 * cx + d, 0)])
         )
 
-        self.segments.append(
-            schemdraw.SegmentText(
-                (self.width / 2, self.height / 4 - 0.06), "I", fontsize=16
-            )
-        )
+        # self.segments.append(
+        #     schemdraw.SegmentText((self.width / 2, self.height / 4 - 0.06), "I")
+        # )
 
-        self.segments.append(
-            schemdraw.SegmentText(
-                (self.width / 2, -self.height / 4 - 0.00), "Q", fontsize=16
-            )
-        )
+        self.label("I", loc="center", ofst=(0, 0.29))
+        self.label("Q", loc="center", ofst=(0, -0.31))
 
 
 class OSA(Rectangle):
